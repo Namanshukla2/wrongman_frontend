@@ -1,6 +1,42 @@
 // components/Footer.jsx
 import Link from 'next/link';
+import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import Skull from './Skull';
+
+const socialLinks = [
+  {
+    name: 'Instagram',
+    icon: <FaInstagram className="w-4 h-4" />,
+    href: 'https://instagram.com/yourpage',
+  },
+  {
+    name: 'Facebook',
+    icon: <FaFacebookF className="w-4 h-4" />,
+    href: 'https://facebook.com/yourpage',
+  },
+  {
+    name: 'Twitter',
+    icon: <FaXTwitter className="w-4 h-4" />,
+    href: 'https://twitter.com/yourpage',
+  },
+];
+
+const quickLinks = [
+  { t: 'Shop All', l: '/shop' },
+  { t: 'T-Shirts', l: '/shop?category=tshirts' },
+  { t: 'Pants', l: '/shop?category=pants' },
+  { t: 'Jackets', l: '/shop?category=jackets' },
+  { t: 'Caps', l: '/shop?category=caps' },
+];
+
+const supportLinks = [
+  { t: 'Track Order', l: '/login' },
+  { t: 'Shipping Info', l: '/shop' },
+  { t: 'Returns & Exchange', l: '/login' },
+  { t: 'Size Guide', l: '/shop' },
+  { t: 'FAQs', l: '/login' },
+];
 
 const Footer = () => (
   <footer
@@ -29,23 +65,23 @@ const Footer = () => (
               </span>
             </div>
           </Link>
+
           <p className="text-sm mb-4" style={{ color: 'var(--muted)' }}>
             ☠️ Your Gen Z multi-brand streetwear destination. Top brands at killer prices.
           </p>
+
           <div className="flex gap-3">
-            {[
-              { name: 'instagram', icon: 'I', href: 'https://instagram.com' },
-              { name: 'facebook', icon: 'F', href: 'https://facebook.com' },
-              { name: 'twitter', icon: 'X', href: 'https://twitter.com' },
-            ].map((s) => (
+            {socialLinks.map((s) => (
               <a
                 key={s.name}
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={s.name}
+                title={s.name}
                 className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-red-600/10 hover:bg-red-600 text-red-600 hover:text-white"
               >
-                <span className="text-sm font-bold">{s.icon}</span>
+                {s.icon}
               </a>
             ))}
           </div>
@@ -57,13 +93,7 @@ const Footer = () => (
             Quick Links
           </h3>
           <ul className="space-y-2">
-            {[
-              { t: 'Shop All', l: '/shop' },
-              { t: 'T-Shirts', l: '/shop?category=tshirts' },
-              { t: 'Pants', l: '/shop?category=pants' },
-              { t: 'Jackets', l: '/shop?category=jackets' },
-              { t: 'Caps', l: '/shop?category=caps' },
-            ].map((i) => (
+            {quickLinks.map((i) => (
               <li key={i.t}>
                 <Link
                   href={i.l}
@@ -83,21 +113,15 @@ const Footer = () => (
             Support
           </h3>
           <ul className="space-y-2">
-            {[
-              { t: 'Track Order', l: '#' },
-              { t: 'Shipping Info', l: '#' },
-              { t: 'Returns & Exchange', l: '#' },
-              { t: 'Size Guide', l: '#' },
-              { t: 'FAQs', l: '#' },
-            ].map((item) => (
+            {supportLinks.map((item) => (
               <li key={item.t}>
-                <a
+                <Link
                   href={item.l}
                   className="hover:text-red-600 transition-colors text-sm"
                   style={{ color: 'var(--muted)' }}
                 >
                   {item.t}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -113,25 +137,52 @@ const Footer = () => (
               <span className="w-8 h-8 rounded-lg bg-red-600/10 flex items-center justify-center text-red-600">
                 📧
               </span>
-              support@wrongman.com
+              <a
+                href="mailto:support@wrongman.com"
+                className="hover:text-red-600 transition-colors"
+              >
+                support@wrongman.com
+              </a>
             </li>
+
             <li className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-red-600/10 flex items-center justify-center text-red-600">
                 📞
               </span>
-              +91 98765 43210
+              <a
+                href="tel:+919876543210"
+                className="hover:text-red-600 transition-colors"
+              >
+                +91 98765 43210
+              </a>
             </li>
+
             <li className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-red-600/10 flex items-center justify-center text-red-600">
-                💬
+                <FaWhatsapp className="w-4 h-4" />
               </span>
-              WhatsApp: +91 98765 43210
+              <a
+                href="https://wa.me/919876543210"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-red-600 transition-colors"
+              >
+                WhatsApp: +91 98765 43210
+              </a>
             </li>
+
             <li className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-red-600/10 flex items-center justify-center text-red-600">
                 📍
               </span>
-              New Delhi, India
+              <a
+                href="https://maps.google.com/?q=New+Delhi+India"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-red-600 transition-colors"
+              >
+                New Delhi, India
+              </a>
             </li>
           </ul>
         </div>
@@ -146,18 +197,19 @@ const Footer = () => (
           <Skull className="w-4 h-4 text-red-600" />
           © 2025 Wrong Man. All rights reserved. ☠️
         </p>
+
         <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--muted)' }}>
-          <a href="#" className="hover:text-red-600 transition-colors">
+          <Link href="/login" className="hover:text-red-600 transition-colors">
             Privacy Policy
-          </a>
+          </Link>
           <span>•</span>
-          <a href="#" className="hover:text-red-600 transition-colors">
+          <Link href="/login" className="hover:text-red-600 transition-colors">
             Terms of Service
-          </a>
+          </Link>
           <span>•</span>
-          <a href="#" className="hover:text-red-600 transition-colors">
+          <Link href="/login" className="hover:text-red-600 transition-colors">
             Refund Policy
-          </a>
+          </Link>
         </div>
       </div>
     </div>
