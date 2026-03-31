@@ -1,24 +1,22 @@
 import Head from 'next/head';
 
-const SEO = ({
-  title = "Wrong Man — Multi-Brand Gen Z Streetwear",
-  description = "Your Gen Z streetwear destination — Levi's, Zara, H&M, Nike & more at killer prices!",
-  image = "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=1200&h=630&fit=crop"
-}) => {
-  const fullTitle = title.includes('Wrong Man') ? title : `${title} | Wrong Man`;
+export default function SEO({ title, description, image }) {
+  const siteTitle = title ? `${title} | WrongMan` : 'WrongMan – Dress Like A Wrong Man';
+  const siteDesc = description || 'Your Gen Z streetwear destination. Top brands at killer prices.';
+  const siteImage = image || '/skull.svg';
 
   return (
     <Head>
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <title>{siteTitle}</title>
+      <meta name="description" content={siteDesc} />
+      <meta property="og:title" content={siteTitle} />
+      <meta property="og:description" content={siteDesc} />
+      <meta property="og:image" content={siteImage} />
+      <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={siteTitle} />
+      <meta name="twitter:description" content={siteDesc} />
+      <link rel="icon" href="/favicon.ico" />
     </Head>
   );
-};
-
-export default SEO;
+}

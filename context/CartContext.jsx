@@ -15,7 +15,6 @@ export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  // Load cart from localStorage on client
   useEffect(() => {
     const saved = localStorage.getItem('wrongman-cart');
     if (saved) {
@@ -28,7 +27,6 @@ export const CartProvider = ({ children }) => {
     setLoaded(true);
   }, []);
 
-  // Save cart to localStorage
   useEffect(() => {
     if (loaded) {
       localStorage.setItem('wrongman-cart', JSON.stringify(cartItems));
@@ -40,7 +38,6 @@ export const CartProvider = ({ children }) => {
       const existingItem = prev.find(
         item => item.id === product.id && item.size === size
       );
-
       if (existingItem) {
         return prev.map(item =>
           item.id === product.id && item.size === size
@@ -48,7 +45,6 @@ export const CartProvider = ({ children }) => {
             : item
         );
       }
-
       return [...prev, { ...product, size, quantity, cartId: Date.now() }];
     });
   };
@@ -69,9 +65,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const clearCart = () => {
-    setCartItems([]);
-  };
+  const clearCart = () => setCartItems([]);
 
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => {

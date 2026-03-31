@@ -1,31 +1,34 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_BASE = '';
 
-async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+const fetchJSON = async (url, options = {}) => {
+  const res = await fetch(url, {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
   });
-
-  if (!res.ok) {
-    const message = await res.text();
-    throw new Error(message || "Request failed");
-  }
-
-  return res.json();
-}
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Request failed');
+  return data;
+};
 
 export const productAPI = {
-  list: () => request("/api/products"),
-  create: (payload) => request("/api/products", { method: "POST", body: JSON.stringify(payload) }),
-  update: (id, payload) => request(`/api/products/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
-  remove: (id) => request(`/api/products/${id}`, { method: "DELETE" }),
+  list: () => fetchJSON(`${API_BASE}/api/products`),
+  get: (id) => fetchJSON(`${API_BASE}/api/products/${id}`),
+  create: (data) => fetchJSON(`${API_BASE}/api/products`, { method: 'POST', body: JSON.stringify(data) }),
+  update: (id, data) => fetchJSON(`${API_BASE}/api/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  remove: (id) => fetchJSON(`${API_BASE}/api/products/${id}`, { method: 'DELETE' }),
 };
 
 export const orderAPI = {
-  list: () => request("/api/orders"),
-  create: (payload) => request("/api/orders", { method: "POST", body: JSON.stringify(payload) }),
-  update: (id, payload) => request(`/api/orders/${id}`, { method: "PATCH", body: JSON.stringify(payload) }),
+  list: () => fetchJSON(`${API_BASE}/api/orders`),
+  get: (id) => fetchJSON(`${API_BASE}/api/orders/${id}`),
+  create: (data) => fetchJSON(`${API_BASE}/api/orders`, { method: 'POST', body: JSON.stringify(data) }),
+  update: (id, data) => fetchJSON(`${API_BASE}/api/orders/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+};
+
+export const authAPI = {
+  me: () => fetchJSON(`${API_BASE}/api/auth/me`),
+  login: (email, password) => fetchJSON(`${API_BASE}/api/auth/login`, { method: 'POST', body: JSON.stringify({ email, password }) }),
+  register: (email, password, name) => fetchJSON(`${API_BASE}/api/auth/register`, { method: 'POST', body: JSON.stringify({ email, password, name }) }),
+  logout: () => fetchJSON(`${API_BASE}/api/auth/logout`, { method: 'POST' }),
 };

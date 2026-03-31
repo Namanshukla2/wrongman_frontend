@@ -1,6 +1,7 @@
 // context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from 'react';
 
+// Call backend directly so cookies work correctly in both dev and prod
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 const AuthContext = createContext(null);
@@ -18,10 +19,16 @@ export function AuthProvider({ children }) {
       const res = await fetch(`${API_BASE}/api/auth/me`, {
         credentials: 'include',
       });
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        setUser(null);
+        return;
+      }
       const data = await res.json();
-      setUser(data);
+      setUser(data || null);
     } catch (err) {
       console.error('GET /api/auth/me error', err);
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -34,12 +41,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Login failed');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Login failed');
     setUser(data);
     return data;
   };
@@ -51,12 +54,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, name }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Register failed');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Register failed');
     setUser(data);
     return data;
   };
@@ -68,12 +67,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ credential }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Google login failed');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Google login failed');
     setUser(data);
     return data;
   };
@@ -85,12 +80,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Failed to send OTP');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Failed to send OTP');
     return data;
   };
 
@@ -101,12 +92,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone, otp }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Invalid OTP');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Invalid OTP');
     setUser(data);
     return data;
   };
@@ -117,12 +104,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Failed');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Failed');
     return data;
   };
 
@@ -132,12 +115,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, password }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Failed');
-    }
-
+    if (!res.ok) throw new Error(data.message || 'Failed');
     return data;
   };
 
