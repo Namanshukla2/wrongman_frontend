@@ -1,4 +1,4 @@
-const API_BASE = '';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 const fetchJSON = async (url, options = {}) => {
   const res = await fetch(url, {
@@ -14,16 +14,16 @@ const fetchJSON = async (url, options = {}) => {
 export const productAPI = {
   list: () => fetchJSON(`${API_BASE}/api/products`),
   get: (id) => fetchJSON(`${API_BASE}/api/products/${id}`),
-  create: (data) => fetchJSON(`${API_BASE}/api/products`, { method: 'POST', body: JSON.stringify(data) }),
-  update: (id, data) => fetchJSON(`${API_BASE}/api/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  create: (data) => fetchJSON(`${API_BASE}/api/products`, { method: 'POST', body: JSON.stringify(data) }),      
+  update: (id, data) => fetchJSON(`${API_BASE}/api/products/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   remove: (id) => fetchJSON(`${API_BASE}/api/products/${id}`, { method: 'DELETE' }),
 };
 
 export const orderAPI = {
   list: () => fetchJSON(`${API_BASE}/api/orders`),
   get: (id) => fetchJSON(`${API_BASE}/api/orders/${id}`),
-  create: (data) => fetchJSON(`${API_BASE}/api/orders`, { method: 'POST', body: JSON.stringify(data) }),
-  update: (id, data) => fetchJSON(`${API_BASE}/api/orders/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  create: (data) => fetchJSON(`${API_BASE}/api/orders`, { method: 'POST', body: JSON.stringify(data) }),        
+  update: (id, data) => fetchJSON(`${API_BASE}/api/orders/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 };
 
 export const authAPI = {
